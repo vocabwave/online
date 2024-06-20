@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxhHJ5nRxMTD8St8C6NDHdrq82F7vwdApHot2mlZvUzUHL2Sq0ucTzSoY8UD1_326tm/exec'
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzIjFOwTT5noEib83iT3pFagK36AnoNvVv7FXtew_8-RDlqwiOEx-uOHeoqTwPrZVaz5w/exec'
 const form = document.forms['google-sheet']
 
 document.addEventListener('DOMContentLoaded', () => {
