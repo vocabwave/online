@@ -1,0 +1,678 @@
+* {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    scroll-behavior: smooth;
+    /* to hide effect of clicking link or button  */
+    -webkit-tap-highlight-color: transparent;
+}
+
+a:visited, a:active {
+    outline: none;
+}
+
+:root {
+    --primary: whitesmoke;
+    --secondary: white;
+    --uniFontClr: rgb(0, 0, 0);
+    --headFont: 1.3rem;
+    --wordPageBG: rgba(255, 255, 154, 0.831);
+    --findTextAreabg: transparent;
+}
+
+/* input placeholder color  */
+.placeholder-fordark::placeholder {
+    color: rgb(218, 218, 218);
+}
+
+.placeholder-forlight::placeholder {
+    color: #888888;
+}
+
+/* Universal Classes */
+.uniFont {
+    font: caption;
+    font-size: 1rem;
+    color: var(--uniFontClr);
+}
+
+.transitionNone {
+    transition-property: color 0s 0s;
+}
+
+.userSlctNone {
+    user-select: none;
+}
+
+.userSlctNone::placeholder {
+    user-select: none;
+}
+
+.boldFont {
+    font-weight: bold;
+}
+
+.headingFont {
+    font-size: var(--headFont);
+    text-transform: uppercase;
+}
+
+.centreText {
+    text-align: center;
+    margin: auto;
+}
+
+.capitText {
+    text-transform: capitalize;
+    word-break: break-all;
+}
+
+/* Css starts here for the page  */
+
+body {
+    background-color: var(--primary);
+}
+
+nav {
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--secondary);
+}
+
+#brandLogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../Files/VocabWave\ without\ bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 4rem;
+    height: 4rem;
+    margin-right: 1rem;
+    position: absolute;
+    left: 0;
+    margin-left: 1rem;
+}
+
+#lightmodeBTN {
+    position: absolute;
+    right: 0;
+    margin-right: 1.5rem;
+    outline: none;
+    border: none;
+    padding: 0.4rem;
+    background-color: transparent;
+    font: caption;
+    font-weight: bold;
+    width: 1.2rem;
+    height: 1.2rem;
+    /* background-image: url(../Files/sun.png);
+    background-image: url(../Files/moon.png); */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+
+}
+
+#dataTrans {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+#dataTrans>button {
+    outline: none;
+    border: none;
+    background-color: greenyellow;
+    font: caption;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin: auto 0.5rem;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+
+#dataTrans>button:after {
+    content: "";
+    background-color: rgb(158, 158, 158);
+    /*Background Clr of BTN*/
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s;
+    filter: blur(10px);
+}
+
+#dataTrans>button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+#userinPrent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+}
+
+#userinPrent>input:nth-child(1) {
+    outline: none;
+    border: 2px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    width: 90%;
+    background-color: var(--primary);
+    padding: 0.5rem 1rem;
+}
+
+#addBTN {
+    padding: 0.55rem 0.7rem;
+    border-radius: 5px;
+    margin-left: 0.5rem;
+    background-color: rgb(212, 218, 255);
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    /* border-color: rgb(0, 60, 255); */
+    border: none;
+    overflow: hidden;
+
+}
+
+
+#addBTN:after {
+    content: "";
+    background-color: rgb(158, 158, 158);
+    /*Background Clr of BTN*/
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s;
+    filter: blur(10px);
+}
+
+#addBTN:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+/* #addBTN:hover {
+    background-color: var(--secondary);
+    background-color: rgba(212, 218, 255, 0.51);
+} */
+
+/* Page Control Section */
+#paginationPrnt {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+#pageCtrlBtn {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.6rem;
+}
+
+#pageCtrlBtn>button {
+    position: relative;
+    background-color: rgb(255, 255, 154);
+    /*Background Clr of BTN*/
+    /*Border of the button*/
+    border: none;
+    font-size: 0.9rem;
+    color: var(--uniFontClr);
+    overflow: hidden;
+    margin: 0.1rem 0.2rem;
+    padding: 0.3rem 0.5rem;
+    width: auto;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+#pageCtrlBtn>button:after {
+    content: "";
+    background-color: rgb(220, 194, 0);
+    /*Background Clr of BTN*/
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s;
+    filter: blur(10px);
+}
+
+#pageCtrlBtn>button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+
+#collectionPrnt {
+    margin: 0rem 0.2rem;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    flex-direction: column;
+    border-top: 4px solid var(--uniFontClr);
+    padding-top: 0.3rem;
+    background-color: var(--wordPageBG);
+    min-height: 80vh;
+    max-height: auto;
+    border-top-left-radius: 8px;
+    overflow: hidden;
+    border-top-right-radius: 8px;
+}
+
+#collectionPrnt>span {
+    background-color: black;
+    width: 2rem;
+    height: 2px;
+    position: relative;
+    margin-bottom: 0.6rem;
+
+}
+
+#collectionData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+
+}
+
+.elemtDataColle {
+    margin: 0.8rem;
+    font: caption;
+    font-size: 1rem;
+}
+
+#wordEditModePrnt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 0.7rem;
+    border-bottom: 2px solid rgb(192, 192, 192);
+}
+
+#searchWord {
+    padding: 0.3rem 0.5rem;
+    width: 15rem;
+    outline: none;
+    background-color: var(--findTextAreabg);
+    border-radius: 5px;
+    border: 2px solid rgb(156, 156, 156);
+}
+
+#sortChangerPrnt {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+
+#sortChangerPrnt>select {
+    border: none;
+    width: auto;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+}
+
+#sortChangerPrnt>button {
+    background-color: rgb(255, 222, 222);
+    border: none;
+    outline: none;
+    padding: 0.4rem 0.5rem;
+    overflow: hidden;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+#sortChangerPrnt>button:after {
+    content: "";
+    background-color: rgb(158, 158, 158);
+    /*Background Clr of BTN*/
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s;
+    filter: blur(10px);
+}
+
+#sortChangerPrnt>button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+#sortChangerPrnt>select, #sortChangerPrnt>button {
+    margin: 0.6rem 0.4rem;
+}
+
+/* Notification Section  */
+#alertUserEle {
+    background-color: rgb(255, 99, 99);
+    width: 100%;
+    height: 8%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font: caption;
+    font-size: 0.9rem;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    text-align: center;
+    transition: 0.5s;
+    opacity: 0;
+}
+
+/* Styling Starts here for dialogue Box and prompt */
+#dialogueBoxPrnt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    opacity: 0;
+    transition: 0.3s;
+    /* Ensure it is on top of other elements */
+}
+
+/* Defined CLass to hide scrollbar  */
+body.no-scroll {
+    overflow: hidden;
+}
+
+.DiaTextAllSize {
+    font: caption;
+    font-size: 1rem;
+    color: black;
+
+}
+
+#mainWindDialo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: auto;
+    transition: 0.3s;
+    max-width: auto;
+    height: auto;
+    padding: 1rem;
+    background-color: var(--secondary);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.441);
+    opacity: 0;
+    transform: scale(0.8);
+    margin: 0 2rem;
+}
+
+#Dialoguetext {
+    margin-bottom: 1rem;
+    user-select: none;
+    width: 100%;
+    text-align: left;
+}
+
+.DiaBtns {
+    outline: none;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    background-color: var(--primary);
+    border-radius: 5px;
+    border: 2px solid #0000002c;
+    cursor: pointer;
+    text-align: left;
+    margin: 0rem 0.3rem;
+    user-select: none;
+}
+
+#mainWindDialo>div {
+    margin-left: auto;
+}
+
+/* Prompt Section starts here  */
+/* Styling for prompt Box */
+#promptBoxPrnt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    opacity: 0;
+    transition: 0.3s;
+    /* Ensure it is on top of other elements */
+}
+
+#mainWindPrompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 60%;
+    transition: 0.3s;
+    max-width: 30rem;
+    height: auto;
+    padding: 1rem;
+    background-color: var(--secondary);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.441);
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+#promptText {
+    margin-bottom: 1rem;
+    user-select: none;
+}
+
+#promptInput {
+    width: 90%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: 2px solid #0000002c;
+    outline: none;
+    border: none;
+}
+
+.PromptBtns {
+    outline: none;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    background-color: var(--primary);
+    border-radius: 5px;
+    border: 2px solid #0000002c;
+    cursor: pointer;
+    margin: 0rem 0.3rem;
+    user-select: none;
+}
+
+#mainWindPrompt>div {
+    margin-left: auto;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .DiaTextAllSize {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 380px) {
+
+    :root {
+        --primary: whitesmoke;
+        --secondary: white;
+        --uniFontClr: rgba(0, 0, 0, 0.666);
+        --headFont: 1.2rem;
+        --wordPageBG: rgba(255, 255, 154, 0.831);
+        --findTextAreabg: transparent;
+    }
+
+    #mainWindDialo {
+        margin: 0 2rem;
+    }
+
+    /* Universal Classes */
+    .uniFont {
+        font: caption;
+        color: var(--uniFontClr);
+        font-size: 0.9rem;
+    }
+
+    .boldFont {
+        font-weight: bold;
+    }
+
+    .headingFont {
+        font-size: var(--headFont);
+        text-transform: uppercase;
+    }
+
+    .centreText {
+        text-align: center;
+        margin: auto;
+    }
+
+    .capitText {
+        text-transform: capitalize;
+        word-break: break-all;
+    }
+
+    #dataTrans {
+        flex-wrap: wrap;
+        align-items: unset;
+        justify-content: center;
+    }
+
+    #dataTrans>button {
+        margin: 0.3rem 0.2rem;
+
+    }
+
+}
+
+@media screen and (max-width: 320px) {
+    body {
+        width: 320px;
+    }
+
+    :root {
+        --primary: whitesmoke;
+        --secondary: white;
+        --uniFontClr: rgba(0, 0, 0, 0.666);
+        --headFont: 1.2rem;
+        --wordPageBG: rgba(255, 255, 154, 0.831);
+        --findTextAreabg: transparent;
+    }
+
+    /* Universal Classes */
+    .uniFont {
+        font: caption;
+        color: var(--uniFontClr);
+        font-size: 0.9rem;
+    }
+
+    .boldFont {
+        font-weight: bold;
+    }
+
+    .headingFont {
+        font-size: var(--headFont);
+        text-transform: uppercase;
+    }
+
+    .centreText {
+        text-align: center;
+        margin: auto;
+    }
+
+    .capitText {
+        text-transform: capitalize;
+        word-break: break-all;
+    }
+
+    #dataTrans {
+        flex-wrap: wrap;
+        align-items: unset;
+        justify-content: center;
+    }
+
+    #dataTrans>button {
+        margin: 0.3rem 0.2rem;
+
+    }
+
+    #mainWindDialo {
+        margin: 0 1rem;
+    }
+}

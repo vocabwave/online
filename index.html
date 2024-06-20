@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" href="./Files/VocabWave with bg 192.png" type="image/png">
+    <link rel="icon" href="./Files/VocabWave with bg 16.png" type="image/png">
+    <link rel="icon" href="./Files/VocabWave with bg 32.png" type="image/png">
+    <link rel="icon" sizes="192x192" href="./Files/VocabWave with bg 192.png" type="image/png">
+    <link rel="shortcut icon" href="./Files/VocabWave with bg 192.png" type="image/png">
+    <meta name="description"
+        content="VocabWave helps you learn and revise vocabulary easily by storing them in your browser. Start improving your vocabulary today!">
+    <meta name="keywords"
+        content="vocabulary, learn vocabulary, revise vocabulary, vocabulary storage, vocabulary revision, browser tool, vocabulary tool">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vocabwave.github.io/">
+    <link rel="stylesheet" href="./Style/style.css">
+    <title>VocabWave</title>
+</head>
+
+<body>
+    <nav>
+        <div id="brandLogo"></div>
+        <h1 class="uniFont boldFont headingFont userSlctNone" style="color: rgb(180, 138, 0);">VocabWave</h1>
+        <button id="lightmodeBTN"></button>
+    </nav>
+    <div id="dataTrans">
+        <button class="userSlctNone" id="copyBTN">Backup</button>
+        <button class="userSlctNone" id="restoreBTN"
+            style="border-color: yellow; background-color: rgb(255, 199, 32); transition: 0;">Restore</button>
+        <button class="userSlctNone" id="deleteBTN"
+            style="border-color: red; background-color: rgb(255, 142, 142);">D-One</button>
+        <button class="userSlctNone" id="deleteAllBTN"
+            style="border-color: red; background-color: rgb(255, 142, 142);">D-All</button>
+    </div>
+    <div id="userinPrent"><input type="search" class="userSlctNone" placeholder="Type any word or sentence"
+            id="userInWord"><button class="uniFont userSlctNone" id="addBTN">Add</button></div>
+
+    <div id="paginationPrnt">
+        <span id="pageIndicator" class="uniFont boldFont userSlctNone"
+            style="margin-right: auto; margin-left: 1rem;"></span>
+        <div id="pageCtrlBtn">
+            <button class="userSlctNone" id="prevPageBTN">Previous</button>
+            <button class="userSlctNone" id="addPageBTN">Add Page</button>
+            <button class="userSlctNone" id="deletePageBTN">Delete Page</button>
+            <button class="userSlctNone" id="nextPageBTN">Next</button>
+        </div>
+    </div>
+    <div id="collectionPrnt">
+        <span></span>
+        <h2 class="uniFont boldFont userSlctNone" style="color: rgb(0, 128, 255); margin-bottom: 0.6rem;">Collection
+        </h2>
+        <div id="wordEditModePrnt">
+            <input type="search" placeholder="Find" class="uniFont userSlctNone" id="searchWord">
+            <div id="sortChangerPrnt">
+                <select class="userSlctNone" id="sortCriteria">
+                    <option class="uniFont userSlctNone" value="name">Name</option>
+                    <option class="uniFont userSlctNone" value="date">Date</option>
+                    <option class="uniFont userSlctNone" value="length">Length</option>
+                    <option class="uniFont userSlctNone" value="random">Random</option>
+                </select>
+                <select class="userSlctNone" id="sortOrder">
+                    <option class="uniFont userSlctNone" value="asc">Ascending</option>
+                    <option class="uniFont userSlctNone" value="desc">Descending</option>
+                </select>
+                <button class="uniFont userSlctNone" id="sortBTN">Apply</button>
+            </div>
+        </div>
+        <div id="collectionData"></div>
+    </div>
+    <!-- Notification Section  -->
+    <div id="alertUserEle">
+    </div>
+    <div id="dialogueBoxPrnt">
+        <div id="mainWindDialo">
+            <p id="Dialoguetext" class="DiaTextAllSize"></p>
+            <div>
+                <button class="DiaBtns DiaTextAllSize" id="button1Text"></button>
+                <button class="DiaBtns DiaTextAllSize" id="button2Text"></button>
+            </div>
+        </div>
+    </div>
+    <div id="promptBoxPrnt">
+        <div id="mainWindPrompt">
+            <p id="promptText" class="DiaTextAllSize">Enter your text:</p>
+            <input type="text" placeholder="Paste Here" id="promptInput" class="DiaTextAllSize" />
+            <div>
+                <button class="DiaBtns DiaTextAllSize" id="promptCancelBtn">Cancel</button>
+                <button class="DiaBtns DiaTextAllSize" id="promptOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="Script/script.js"></script>
+
+</html>
