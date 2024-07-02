@@ -9,18 +9,24 @@ let sortOrder = document.getElementById("sortOrder"); // Sort Order Dropdown
 let userInWord = document.getElementById("userInWord"); // Input Text field
 let searchWord = document.getElementById("searchWord"); // Search Input field
 let collectionData = document.getElementById("collectionData"); // Main element for displaying words
-let alertUserEle = document.getElementById("alertUserEle"); //Element that will notify the user when any action happen during the session.
+let alertUserEle = document.getElementById("alertUserEle"); // Element that will notify the user when any action happens during the session.
 let prevPageBTN = document.getElementById("prevPageBTN"); // Previous Page Button
 let nextPageBTN = document.getElementById("nextPageBTN"); // Next Page Button
 let addPageBTN = document.getElementById("addPageBTN"); // Add Page Button
 let pageIndicator = document.getElementById("pageIndicator"); // Page Indicator
 
-// Retrieve words from local storage or initialize as an empty array
+let overlayMenu = document.getElementById("overlayMenu");
+let editOverlay = document.getElementById("editOverlay");
+let editInput = document.getElementById("editInput");
+
 let pages = JSON.parse(localStorage.getItem('pages')) || [[]];
 let currentPage = 0;
-let deleteMode = false; // Flag to track delete mode
+let deleteMode = false;
 
-// Function to refresh the list of words on the screen
+let longPressTimer;
+let selectedWordElement;
+let selectedWordObj;
+
 function refreshWords(filteredWords = null) {
     collectionData.innerHTML = "";
     let displayWords = filteredWords || pages[currentPage];
@@ -39,13 +45,11 @@ function refreshWords(filteredWords = null) {
             let wordElement = document.createElement("p");
             wordElement.className = "elemtDataColle capitText";
             wordElement.innerText = displayWords[i].word;
-            wordElement.addEventListener("click", () => {
-                if (deleteMode) {
-                    pages[currentPage].splice(pages[currentPage].indexOf(displayWords[i]), 1); // Remove the word from the array
-                    localStorage.setItem('pages', JSON.stringify(pages)); // Update local storage
-                    refreshWords(); // Refresh the list
-                }
-            });
+            wordElement.addEventListener("mousedown", (event) => handleMouseDown(event, displayWords[i], wordElement));
+            wordElement.addEventListener("mouseup", handleMouseUp);
+            wordElement.addEventListener("mouseleave", handleMouseUp);
+            wordElement.addEventListener("touchstart", (event) => handleTouchStart(event, displayWords[i], wordElement));
+            wordElement.addEventListener("touchend", handleTouchEnd);
             wordElement.addEventListener("dblclick", () => {
                 let searchQuery = `https://www.google.com/search?q=Define+${displayWords[i].word}`;
                 window.open(searchQuery, '_blank');
@@ -60,10 +64,8 @@ function refreshWords(filteredWords = null) {
         collectionData.classList.remove("delete-mode");
     }
 
-    // Update page indicator
     pageIndicator.innerText = `Page ${currentPage + 1} of ${pages.length}`;
 }
-
 // Initial call to refreshWords to display any stored words on page load
 refreshWords();
 
@@ -257,6 +259,7 @@ prevPageBTN.addEventListener("click", () => {
     if (currentPage > 0) {
         currentPage--;
         refreshWords();
+        localStorage.setItem('currentPage', currentPage); // Save current page to local storage
     }
 });
 
@@ -265,8 +268,10 @@ nextPageBTN.addEventListener("click", () => {
     if (currentPage < pages.length - 1) {
         currentPage++;
         refreshWords();
+        localStorage.setItem('currentPage', currentPage); // Save current page to local storage
     }
 });
+
 
 // Event listener for the add page button
 addPageBTN.addEventListener("click", async () => {
@@ -333,7 +338,9 @@ deletePageBTN.addEventListener("click", async () => {
 
 function updatePageIndicator() {
     document.getElementById('pageIndicator').innerText = `Page ${currentPage + 1} of ${pages.length}`;
+    localStorage.setItem('currentPage', currentPage); // Save current page to local storage
 }
+
 
 // Light mode control feature section 
 let lightmodeBTN = document.getElementById("lightmodeBTN"); // Light Mode Button
@@ -355,6 +362,11 @@ function toggleMode() {
 // Event listener for the light mode button
 lightmodeBTN.addEventListener("click", toggleMode);
 
+// Setting up dark css in a variable 
+let sty = document.createElement("link");
+sty.setAttribute('rel', 'stylesheet');
+sty.setAttribute("href", "Style/darkTheme.css");
+
 // Check local storage for the saved theme on page load
 window.addEventListener("load", () => {
     if (localStorage.getItem('theme') === 'dark') {
@@ -365,137 +377,11 @@ window.addEventListener("load", () => {
     }
 });
 function lightMode() {
-    lightmodeBTN.style.backgroundImage = "url(./Files/moon.png)";
-    const primary = "whitesmoke";
-    const secondary = "white";
-    const fontclr = "black";
-    lightmodeBTN.style.filter = "invert(0)";
-    document.body.style.backgroundColor = primary;
-    document.querySelector('nav').style.backgroundColor = secondary;
-    document.querySelector("#dataTrans").children[0].style.backgroundColor = 'greenyellow'; //For Backup
-    //changing the color of the font of data trans btn
-    for (let i = 0; i < document.querySelector("#dataTrans").children.length; i++) {
-        document.querySelector("#dataTrans").children[i].style.color = 'black';
-
-    }
-    document.querySelector("#dataTrans").children[1].style.backgroundColor = 'rgb(255, 199, 32)'; //For Restore
-    document.querySelector('#userinPrent').children[0].style.backgroundColor = 'transparent'; //For Wordtype adding
-    document.querySelector('#userinPrent').children[0].classList.remove("placeholder-fordark"); //For Wordtype adding
-    document.querySelector('#userinPrent').children[0].classList.add("placeholder-forlight"); //For Wordtype adding
-    document.querySelector('#userinPrent').children[0].style.color = fontclr;  //For Wordtype adding
-    addBTN.style.backgroundColor = '#d4daff'; //add button
-    addBTN.style.color = fontclr; //add button
-    //Mass change of page control buttons
-    for (let i = 0; i < document.querySelector("#pageCtrlBtn").children.length; i++) {
-        document.querySelector("#pageCtrlBtn").children[i].style.backgroundColor = "#ffff9a";
-        document.querySelector("#pageCtrlBtn").children[i].style.color = fontclr;
-    }
-    pageIndicator.style.color = fontclr;//page count show
-    document.querySelector("#collectionPrnt").style.backgroundColor = '#ffff9ad4'; //Main Page background
-    document.querySelector("#collectionPrnt").children[1].style.color = 'rgb(0, 128, 255)'; //heading of the word page
-    document.querySelector("#wordEditModePrnt").children[0].style.color = fontclr; //find input field
-    document.querySelector("#wordEditModePrnt").children[0].classList.remove("placeholder-fordark"); //find input
-    document.querySelector("#wordEditModePrnt").children[0].classList.add("placeholder-forlight"); //find input
-    //mass change of the select buttons sort
-    for (let i = 0; i < 2; i++) {
-        document.querySelector("#sortChangerPrnt").children[i].style.backgroundColor = "transparent";
-        document.querySelector("#sortChangerPrnt").children[i].style.color = fontclr;
-        document.querySelector("#sortChangerPrnt").children[2].style.color = fontclr;
-
-    }
-    sortBTN.style.backgroundColor = '#ffdede'; //apply button
-    //mass element of words
-    for (let i = 0; i < collectionData.children.length; i++) {
-        collectionData.style.color = fontclr;
-    }
-    document.querySelector("#collectionPrnt").style.borderColor = 'black';
-    document.querySelector("#collectionPrnt").children[0].style.backgroundColor = 'black';
-    //Prompt And Dia-Box
-    let DiaTextAllSize = document.getElementsByClassName("DiaTextAllSize");
-    let mainWindDialo = document.getElementById("mainWindDialo");
-    let mainWindPrompt = document.getElementById("mainWindPrompt");
-    for (let i = 0; i < DiaTextAllSize.length; i++) {
-        DiaTextAllSize[i].style.color = "black";
-
-    }
-
-    promptInput.style.backgroundColor = primary;
-    mainWindDialo.style.backgroundColor = secondary;
-    mainWindDialo.style.boxShadow = '0px 0px 10px 0px rgba(255, 255, 255, 0.441)';
-    mainWindPrompt.style.backgroundColor = secondary;
-    mainWindPrompt.style.boxShadow = '0px 0px 10px 0px rgba(255, 255, 255, 0.441)';
-    for (let i = 0; i < DiaBtns.length; i++) {
-        DiaBtns[i].style.backgroundColor = primary
-
-    }
+    document.head.removeChild(sty);
 }
 function darkMode() {
-    lightmodeBTN.style.backgroundImage = "url(./Files/sun.png)";
-    const primary = "#222";
-    const secondary = "#111";
-    document.body.style.backgroundColor = primary;
-    document.querySelector('nav').style.backgroundColor = secondary;
-    lightmodeBTN.style.filter = "invert(1)";
-    document.querySelector("#dataTrans").children[0].style.backgroundColor = '#6ca416'; //For Backup
-    //changing the color of the font of data trans btn
-    for (let i = 0; i < document.querySelector("#dataTrans").children.length; i++) {
-        document.querySelector("#dataTrans").children[i].style.color = 'white';
-
-    }
-    document.querySelector("#dataTrans").children[1].style.backgroundColor = '#c79d1f'; //For Restore
-    // document.querySelector("#dataTrans").children[2].style.backgroundColor = '#cd6060'; //For D-One
-    // document.querySelector("#dataTrans").children[3].style.backgroundColor = '#cd6060'; //For D-All
-    document.querySelector('#userinPrent').children[0].style.backgroundColor = 'black'; //For Wordtype adding
-    document.querySelector('#userinPrent').children[0].classList.remove("placeholder-forlight"); //For Wordtype adding
-    document.querySelector('#userinPrent').children[0].classList.add("placeholder-fordark"); //For Wordtype adding
-    document.querySelector('#userinPrent').children[0].style.color = 'white';  //For Wordtype adding
-    addBTN.style.backgroundColor = '#959bbb'; //add button
-    addBTN.style.color = 'white'; //add button
-    for (let i = 0; i < document.querySelector("#pageCtrlBtn").children.length; i++) {
-        document.querySelector("#pageCtrlBtn").children[i].style.backgroundColor = "#919100";
-        document.querySelector("#pageCtrlBtn").children[i].style.color = "white";
-    }
-    pageIndicator.style.color = 'white';
-    document.querySelector("#collectionPrnt").style.backgroundColor = '#a1a1468a'; //Main Page background
-    document.querySelector("#collectionPrnt").children[1].style.color = 'whitesmoke';
-    document.querySelector("#wordEditModePrnt").children[0].style.color = 'white';
-    document.querySelector("#wordEditModePrnt").children[0].classList.remove("placeholder-forlight");
-    document.querySelector("#wordEditModePrnt").children[0].classList.add("placeholder-fordark");
-    for (let i = 0; i < 2; i++) {
-        document.querySelector("#sortChangerPrnt").children[i].style.backgroundColor = "transparent";
-        document.querySelector("#sortChangerPrnt").children[i].style.color = "white";
-        document.querySelector("#sortChangerPrnt").children[2].style.color = "white";
-
-    }
-    sortBTN.style.backgroundColor = '#a78484';
-    for (let i = 0; i < collectionData.children.length; i++) {
-        collectionData.style.color = 'white';
-    }
-    document.querySelector("#collectionPrnt").style.borderColor = 'whitesmoke';
-    document.querySelector("#collectionPrnt").children[0].style.backgroundColor = 'whitesmoke';
-    //Prompt And Dia-Box
-    let DiaTextAllSize = document.getElementsByClassName("DiaTextAllSize");
-    let DiaBtns = document.getElementsByClassName("DiaBtns");
-    let mainWindDialo = document.getElementById("mainWindDialo");
-    let mainWindPrompt = document.getElementById("mainWindPrompt");
-    let promptInput = document.getElementById("promptInput");
-    for (let i = 0; i < DiaTextAllSize.length; i++) {
-        DiaTextAllSize[i].style.color = "white";
-
-    }
-    promptInput.style.backgroundColor = 'black';
-    mainWindDialo.style.backgroundColor = primary;
-    mainWindDialo.style.boxShadow = '0px 0px 10px 0px ' + primary;
-    mainWindPrompt.style.backgroundColor = primary;
-    mainWindPrompt.style.boxShadow = '0px 0px 10px 0px ' + primary;
-    for (let i = 0; i < DiaBtns.length; i++) {
-        DiaBtns[i].style.backgroundColor = secondary;
-    }
+    document.head.appendChild(sty);
 }
-
-
-
-
 
 // Get elements
 const mainWindDialo = document.getElementById("mainWindDialo");
@@ -593,3 +479,246 @@ function closePrompt() {
     }, 300);
 }
 
+// Side Menu Javascript Code 
+let sideMenuBTNNav = document.getElementById("sideMenuBTNNav");
+document.getElementById('sideMenuBTNNav').addEventListener('click', function () {
+    var sideMenuParent = document.getElementById('sidemenuParnt');
+    if (sideMenuParent.style.display === "block") {
+        document.getElementById('sideMenu').classList.add('hideMenu');
+        document.getElementById('sideMenu').classList.remove('showMenu');
+        sideMenuBTNNav.children[1].style.opacity = "1";
+        sideMenuBTNNav.children[0].style.transform = "rotate(0) translate(0, 0)";
+        sideMenuBTNNav.children[2].style.transform = "rotate(0) translate(0, 0)";
+        setTimeout(() => {
+            sideMenuParent.style.display = "none";
+            document.body.classList.remove('no-scroll');
+            // Adding global click event listener
+        }, 400);
+    } else {
+        sideMenuParent.style.display = "block";
+
+        setTimeout(() => {
+            document.getElementById('sideMenu').classList.add('showMenu');
+            document.getElementById('sideMenu').classList.remove('hideMenu');
+            sideMenuBTNNav.children[1].style.opacity = "0";
+            sideMenuBTNNav.children[0].style.transform = "rotate(45deg) translate(5px, 5px)";
+            sideMenuBTNNav.children[2].style.transform = "rotate(-45deg) translate(8px, -8px)";
+            document.body.classList.add('no-scroll');
+            document.addEventListener("mousedown", SideMenuCollapse);
+        }, 100);
+    }
+});
+
+
+// Script to show menu for words 
+function handleMouseDown(event, wordObj, wordElement) {
+    selectedWordObj = wordObj;
+    selectedWordElement = wordElement;
+    longPressTimer = setTimeout(() => {
+        showOverlayMenu(event.clientX, event.clientY);
+    }, 500);
+}
+
+function handleMouseUp() {
+    clearTimeout(longPressTimer);
+}
+
+function handleTouchStart(event, wordObj, wordElement) {
+    selectedWordObj = wordObj;
+    selectedWordElement = wordElement;
+    longPressTimer = setTimeout(() => {
+        showOverlayMenu(event.touches[0].clientX, event.touches[0].clientY);
+    }, 500);
+}
+
+function handleTouchEnd() {
+    clearTimeout(longPressTimer);
+}
+
+function showOverlayMenu(x, y) {
+    overlayMenu.style.display = "flex";
+    document.body.classList.add('no-scroll');
+    document.getElementById('HoldMenuSlctText').textContent = selectedWordObj.word
+}
+
+
+document.getElementById("searchBtn").addEventListener("click", () => {
+    let searchQuery = `https://www.google.com/search?q=Define+${selectedWordObj.word}`;
+    window.open(searchQuery, '_blank');
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+});
+
+document.getElementById("editBtn").addEventListener("click", () => {
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+    editOverlay.style.left = `${selectedWordElement.getBoundingClientRect().left}px`;
+    editOverlay.style.top = `${selectedWordElement.getBoundingClientRect().top}px`;
+    editOverlay.style.display = "block";
+    editInput.value = selectedWordObj.word;
+    editInput.focus();
+});
+
+editInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        let editedWord = editInput.value.trim(); // Remove leading and trailing whitespace
+
+        // Check if the edited word contains any spaces within itself
+        if (/\s/.test(editedWord)) {
+            showAlert("Word cannot contain spaces within.", true);
+        } else if (editedWord === "") {
+            showAlert("Cannot submit blank word.", true);
+        } else {
+            selectedWordObj.word = editedWord;
+            localStorage.setItem('pages', JSON.stringify(pages));
+            refreshWords();
+            editOverlay.style.display = "none";
+            showAlert("Word edited successfully.", false);
+        }
+    }
+});
+
+
+document.getElementById("archiveBtn").addEventListener("click", () => {
+    if (selectedWordObj) {
+        // Archive the selected word
+        let archivedWords = JSON.parse(localStorage.getItem('archivedWords')) || [];
+        archivedWords.push(selectedWordObj.word);
+        localStorage.setItem('archivedWords', JSON.stringify(archivedWords));
+
+        // Optionally remove the word from the current page
+        pages[currentPage] = pages[currentPage].filter(word => word !== selectedWordObj);
+        localStorage.setItem('pages', JSON.stringify(pages));
+
+        // Refresh your UI or perform any necessary updates
+        refreshWords();
+        showAlert("Word archived successfully.", true);
+    } else {
+        showAlert("No word selected.", true);
+    }
+
+    // Hide the overlay menu and restore scroll
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+});
+
+
+document.getElementById("copyBtn").addEventListener("click", () => {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(selectedWordObj.word).then(() => {
+            showAlert("Word copied to clipboard.", true);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            showAlert("Failed to copy word.", false);
+        });
+    } else {
+        // Fallback for browsers that don't support navigator.clipboard
+        let textArea = document.createElement("textarea");
+        textArea.value = selectedWordObj.word;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showAlert("Word copied to clipboard.", true);
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            showAlert("Failed to copy word.", false);
+        }
+        document.body.removeChild(textArea);
+    }
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+});
+
+
+document.getElementById("moveBtn").addEventListener("click", async () => {
+    let destinationPage = await showPrompt("Enter the destination page number:");
+    if (destinationPage !== null && !isNaN(destinationPage) && destinationPage > 0 && destinationPage <= pages.length) {
+        pages[destinationPage - 1].push(selectedWordObj);
+        pages[currentPage] = pages[currentPage].filter(word => word !== selectedWordObj);
+        localStorage.setItem('pages', JSON.stringify(pages));
+        refreshWords();
+        showAlert("Word moved successfully.", true);
+    } else {
+        showAlert("Invalid page number.", true);
+    }
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+});
+
+document.getElementById("deleteBtn").addEventListener("click", async () => {
+    const confirmDeletion = await showDialogue("Are you sure you want to delete this word?", 'No', 'Yes');
+    if (confirmDeletion) {
+        showAlert("Word deleted.", true);
+        pages[currentPage] = pages[currentPage].filter(word => word !== selectedWordObj);
+        localStorage.setItem('pages', JSON.stringify(pages));
+        refreshWords();
+        showAlert("Word deleted successfully.", false);
+        overlayMenu.style.display = "none";
+        document.body.classList.remove('no-scroll');
+
+    } else {
+        showAlert("Deletion canceled.", false);
+    }
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+});
+
+
+document.getElementById("ExitBtn").addEventListener("click", () => {
+    overlayMenu.style.display = "none";
+    document.body.classList.remove('no-scroll');
+
+})
+
+
+// For Mobile User 
+// Add this JavaScript code to handle long press on touch devices
+let touchStartTimer;
+let touchWordElement;
+let touchWordObj;
+
+collectionData.addEventListener("touchstart", (event) => {
+    let touch = event.touches[0];
+    let element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+    touchWordObj = findWordObj(element.textContent.trim());
+    if (touchWordObj) {
+        touchWordElement = element;
+        touchStartTimer = setTimeout(() => {
+            showOverlayMenu(touch.clientX, touch.clientY);
+        }, 500);
+    }
+});
+
+collectionData.addEventListener("touchend", () => {
+    clearTimeout(touchStartTimer);
+});
+
+function findWordObj(word) {
+    for (let page of pages) {
+        for (let wordObj of page) {
+            if (wordObj.word === word) {
+                return wordObj;
+            }
+        }
+    }
+    return null;
+}
+
+
+
+// Load Previous Pages 
+document.addEventListener("DOMContentLoaded", () => {
+    const savedPage = localStorage.getItem('currentPage');
+    if (savedPage !== null) {
+        currentPage = parseInt(savedPage, 10);
+        refreshWords();
+    } else {
+        currentPage = 0;
+        refreshWords();
+    }
+});

@@ -66,6 +66,10 @@ a:visited, a:active {
 .capitText {
     text-transform: capitalize;
     word-break: break-all;
+    padding: 0.3rem 0.4rem;
+    border: 2px solid rgba(0, 0, 0, 0.452);
+    border-radius: 5px;
+    user-select: none;
 }
 
 /* Css starts here for the page  */
@@ -82,6 +86,8 @@ nav {
     align-items: center;
     background-color: var(--secondary);
 }
+
+/* Side Menu Button And Its Styling */
 
 #brandLogo {
     display: flex;
@@ -111,8 +117,9 @@ nav {
     font-weight: bold;
     width: 1.2rem;
     height: 1.2rem;
-    /* background-image: url(../Files/sun.png);
-    background-image: url(../Files/moon.png); */
+    /* background-image: url(../Files/sun.png);*/
+    background-image: url(../Files/moon.png);
+    filter: invert();
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -131,7 +138,6 @@ nav {
 #dataTrans>button {
     outline: none;
     border: none;
-    background-color: greenyellow;
     font: caption;
     font-weight: bold;
     text-transform: uppercase;
@@ -141,8 +147,12 @@ nav {
     cursor: pointer;
     border-radius: 5px;
     overflow: hidden;
+    color: black;
 }
 
+#copyBTN {
+    background-color: greenyellow;
+}
 
 #dataTrans>button:after {
     content: "";
@@ -179,7 +189,6 @@ nav {
     border: 2px solid rgb(156, 156, 156);
     border-radius: 5px;
     width: 90%;
-    background-color: var(--primary);
     padding: 0.5rem 1rem;
 }
 
@@ -191,7 +200,6 @@ nav {
     cursor: pointer;
     user-select: none;
     font-weight: bold;
-    /* border-color: rgb(0, 60, 255); */
     border: none;
     overflow: hidden;
 
@@ -241,6 +249,7 @@ nav {
     justify-content: center;
     align-items: center;
     width: 100%;
+    flex-wrap: wrap;
     margin-top: 0.6rem;
 }
 
@@ -254,7 +263,7 @@ nav {
     color: var(--uniFontClr);
     overflow: hidden;
     margin: 0.1rem 0.2rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.3rem 0.3rem;
     width: auto;
     text-align: center;
     text-decoration: none;
@@ -297,9 +306,7 @@ nav {
     background-color: var(--wordPageBG);
     min-height: 80vh;
     max-height: auto;
-    border-top-left-radius: 8px;
     overflow: hidden;
-    border-top-right-radius: 8px;
 }
 
 #collectionPrnt>span {
@@ -364,7 +371,6 @@ nav {
 }
 
 #sortChangerPrnt>button {
-    background-color: rgb(255, 222, 222);
     border: none;
     outline: none;
     padding: 0.4rem 0.5rem;
@@ -418,6 +424,7 @@ nav {
     text-align: center;
     transition: 0.5s;
     opacity: 0;
+    z-index: 21;
 }
 
 /* Styling Starts here for dialogue Box and prompt */
@@ -559,6 +566,209 @@ body.no-scroll {
     margin-left: auto;
 }
 
+/* Light Theme Styling  */
+
+#lightmodeBTN {
+    background-image: url(../Files/moon.png);
+    filter: invert(0);
+}
+
+body {
+    background-color: var(--primary);
+}
+
+nav {
+    background-color: var(--secondary);
+}
+
+#copyBTN {
+    background-color: greenyellow;
+
+}
+
+#dataTrans>button {
+    color: black;
+}
+
+#restoreBTN {
+    background-color: rgb(255, 199, 32);
+}
+
+#userinPrent>input {
+    background-color: transparent;
+    color: var(--uniFontClr);
+}
+
+#userinPrent>input::placeholder {
+    color: #888888;
+}
+
+#addBTN {
+    background-color: #d4daff;
+    color: var(--uniFontClr);
+}
+
+#pageCtrlBtn>button {
+    background-color: #ffff9a;
+    color: var(--uniFontClr);
+}
+
+#pageIndicator {
+    color: var(--uniFontClr);
+}
+
+#collectionPrnt {
+    background-color: #ffff9ad4;
+    border-color: rgb(0, 0, 0);
+}
+
+#collectionPrnt>span {
+    background-color: rgb(0, 0, 0);
+}
+
+#collectionPrnt>h2 {
+    color: rgb(0, 0, 0);
+}
+
+#wordEditModePrnt>input {
+    color: var(--uniFontClr);
+}
+
+#wordEditModePrnt>input::placeholder {
+    color: #888888;
+}
+
+#sortChangerPrnt>select {
+    color: var(--uniFontClr);
+    background-color: transparent;
+}
+
+#sortChangerPrnt>button {
+    color: rgb(0, 0, 0);
+}
+
+#sortBTN {
+    background-color: #ffdede;
+}
+
+#collectionData {
+    color: var(--uniFontClr);
+}
+
+.DiaTextAllSize {
+    color: var(--uniFontClr);
+}
+
+#promptInput {
+    background-color: var(--primary);
+}
+
+#mainWindDialo {
+    background-color: var(--secondary);
+    box-shadow: 0px 0px 10px 0px var(--secondary);
+}
+
+#mainWindPrompt {
+    background-color: var(--secondary);
+    box-shadow: 0px 0px 10px 0px var(--secondary);
+
+}
+
+.DiaBtns {
+    background-color: var(--primary);
+}
+
+/* Hold Menu  */
+/* Add these styles to your CSS file */
+.overlay-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-menu button {
+    display: block;
+    margin: 5px 0;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.overlay-edit {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+}
+
+.overlay-edit input {
+    width: 80%;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    margin-top: 0.15rem;
+    padding: 5px;
+    background-color: white;
+}
+
+#overlayMenu {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.265);
+    z-index: 200;
+    top: 0;
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    left: 0;
+    border: none;
+    outline: none;
+}
+
+#overlayMenu>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 90%;
+    max-width: 40rem;
+}
+
+#overlayMenu>div>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+#overlayMenu>div>div>button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    width: 4rem;
+    height: 4rem;
+    font: caption;
+    color: black;
+    background-color: rgb(228, 228, 228);
+    margin: 0.5rem 0.5rem;
+    flex-direction: column;
+}
+
+/* Hold Menu Feature  */
+#editOverlay {
+    outline: none;
+    border: none;
+    /* width: 20rem; */
+}
 
 
 @media screen and (max-width: 800px) {

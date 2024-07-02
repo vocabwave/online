@@ -1,0 +1,156 @@
+/* Here is the side menu styling  */
+
+#sideMenuBTNNav {
+    width: 3rem;
+    height: 3rem;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#sideMenuBTNNav>span {
+    background-color: #af9500;
+    width: 60%;
+    height: 3px;
+    margin: 3px auto;
+    transition: 0.3s;
+}
+
+/* #sideMenuBTNNav>span:nth-child(1){
+    transform: rotate(45deg) translate(10px, 10px);
+}
+#sideMenuBTNNav>span:nth-child(2){
+    opacity: 0;
+}
+#sideMenuBTNNav>span:nth-child(3){
+    transform: rotate(-45deg) translate(3px, -3px);
+} */
+
+#sidemenuParnt {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: none;
+    z-index: 20;
+    backdrop-filter: blur(10px);
+}
+
+#sidemenuParnt {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: none;
+    z-index: 20;
+    backdrop-filter: blur(10px);
+}
+
+#sideMenu {
+    width: 70%;
+    max-width: 20rem;
+    background-color: rgba(245, 245, 245, 0.673);
+    height: 100vh;
+    position: absolute;
+    z-index: 20;
+    transition: left 0.3s;
+    left: -75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 3px solid rgb(255, 255, 255);
+    overflow-y: scroll;
+}
+
+#sideMenu.showMenu {
+    left: 0;
+}
+
+#sideMenu.hideMenu {
+    left: -75%;
+}
+
+#sideMenu>button {
+    width: 100%;
+    height: auto;
+    border: none;
+    padding: 0.5rem 0rem;
+    margin: 0.2rem 0rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 0.7rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    font: caption;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.89rem;
+}
+
+#sideMenu>a {
+    width: 100%;
+    height: auto;
+    border: none;
+    padding: 0.5rem 0rem;
+    margin: 0.2rem 0rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 1.6rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    font: caption;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.89rem;
+    text-decoration: none;
+}
+
+.extraSMenu {
+    width: 100%;
+    height: auto;
+    border: none;
+    padding: 0.5rem 0rem;
+    margin: 0.2rem 0rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 0.7rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    font: caption;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.89rem;
+    text-decoration: none;
+}
+
+#vertagSMenu {
+    color: black;
+    font: caption;
+    font-size: 0.89rem;
+}
+
+#contactDetailsSMenu {
+    color: black;
+    font: caption;
+    font-size: 0.89rem;
+}
+
+#appUpdateBtn {
+    background-color: rgb(180, 180, 180);
+}
+
+.extraSMenu {
+    background-color: rgb(180, 180, 180);
+}
