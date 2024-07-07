@@ -82,6 +82,69 @@ addBTN.addEventListener("click", () => {
     addWord();
 });
 
+// Function to paste clipboard data directly and add word
+document.getElementById("pasteBTN").addEventListener("click", async () => {
+    try {
+        // Access the clipboard and read the text
+        const clipboardText = await navigator.clipboard.readText();
+
+        // Check if clipboard is empty
+        if (clipboardText.trim() === "") {
+            showAlert("Clipboard is empty or do not containt text.");
+        } else {
+            // Store clipboard text in a variable
+            let clipboardVariable = clipboardText;
+            clipToWord(clipboardVariable);
+            // You can use the clipboardVariable as needed
+        }
+    } catch (error) {
+        // If there's an error or clipboard doesn't contain text, alert the user
+        showAlert("Clipboard does not contain text. Please copy some text first.");
+    }
+});
+
+function clipToWord(text) {
+    if (text) { // Ensure the input is not empty
+        // Remove all symbols and keep only alphanumeric characters and spaces
+        let cleanedInputText = text.replace(/[^a-zA-Z0-9\s]/g, '');
+        let inputWords = cleanedInputText.split(/\s+/); // Split the input by spaces
+        let uniqueInputWords = [...new Set(inputWords.map(word => word.toLowerCase()))]; // Unique words in lower case
+        let wordsToAdd = [];
+        let duplicateInStorage = false;
+
+        // Check if any of the words already exist in storage
+        for (let word of uniqueInputWords) {
+            let found = false;
+            for (let page of pages) {
+                if (page.some(wordObj => wordObj.word.toLowerCase() === word)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                wordsToAdd.push(word); // Add the word to the list of words to be added
+            } else if (inputWords.length === 1) { // If it's a single word input and it's found
+                duplicateInStorage = true;
+                showAlert(`The word "${word}" is already saved.`, true);
+                break;
+            }
+        }
+
+        if (!duplicateInStorage && wordsToAdd.length > 0) {
+            wordsToAdd.forEach(word => {
+                pages[currentPage].push({ word: word, date: new Date().toISOString() });
+            });
+            localStorage.setItem('pages', JSON.stringify(pages)); // Store updated words array in local storage
+            refreshWords(); // Refresh the list to show the new words
+            userInWord.value = ""; // Clear the input field after adding the words
+            BoomFire();
+            showAlert("Word(s) added successfully.", true);
+        } else if (!duplicateInStorage && wordsToAdd.length === 0) {
+            showAlert("All word(s) are already saved.", true);
+        }
+    }
+}
+
 //Function to add word
 function addWord() {
     let inputText = userInWord.value.trim();
@@ -118,6 +181,7 @@ function addWord() {
             localStorage.setItem('pages', JSON.stringify(pages)); // Store updated words array in local storage
             refreshWords(); // Refresh the list to show the new words
             userInWord.value = ""; // Clear the input field after adding the words
+            BoomFire()
             showAlert("Word(s) added successfully.", true);
         } else if (!duplicateInStorage && wordsToAdd.length === 0) {
             showAlert("All word(s) are already saved.", true);
@@ -130,44 +194,110 @@ function addWord() {
 copyBTN.addEventListener("click", async () => {
     // Show the confirmation dialog
     const userConfirmed = await showDialogue(
-        "Are you sure you want to copy the data? This will copy all pages data to the clipboard.",
+        "Are you sure you want to download the data? This will provide a text file containing all pages data.",
         'No',
         'Yes'
     );
+    // const userConfirmed = await showDialogue(
+    //     "Are you sure want to restore data from a backup file? If yes, upload that file.",
+    //     'Cancel',
+    //     'Ok'
+    // );
 
-    // If the user confirms, proceed with the copy action
+    // If the user confirms, proceed with the download action
     if (userConfirmed) {
-        let textArea = document.createElement("textarea");
-        textArea.value = JSON.stringify(pages);
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
+        const dateTime = new Date().toISOString().replace(/[-:]/g, "").replace("T", "_").replace("Z", "");
 
-        // Notify the user that data has been copied
-        showAlert("Data copied to clipboard! Now save it as a text file on your device.");
+        // Create a Blob with the JSON data
+        const blob = new Blob([JSON.stringify(pages)], { type: 'text/plain' });
+
+        // Create a download link
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `VocabWave_Backup_File_${dateTime}.txt`;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+
+        // Trigger the download
+        link.click();
+
+        // Clean up
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+
+        // Notify the user that data has been downloaded
+        showAlert("Data downloaded as a text file! Check your downloads folder.");
     }
 });
+
 
 
 // Event listener for the restore button
 restoreBTN.addEventListener("click", async () => {
-    let backupData = await showPrompt("Paste your backup data here:");
-    if (backupData) {
-        try {
-            pages = JSON.parse(backupData);
-            currentPage = 0; // Reset to the first page
-            localStorage.setItem('pages', JSON.stringify(pages));
-            refreshWords();
-            showAlert("Data restored successfully!");
-            setTimeout(() => {
-                alertUserEle.innerText = "";
-            }, 3000);
-        } catch (e) {
-            showAlert("Invalid data format. Please try again.");
-        }
+    // Show confirmation dialog
+    const userConfirmed = await showDialogue(
+        "Are you sure you want to restore data from a backup file? If yes, then select & upload that file.",
+        'Cancel',
+        'Ok'
+    );
+
+    if (userConfirmed) {
+        // Show file upload dialog
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.txt'; // Accept only text files for backup
+        fileInput.style.display = 'none';
+        document.body.appendChild(fileInput);
+
+        // Trigger file input click
+        fileInput.click();
+
+        // Handle file selection
+        fileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    const fileReader = new FileReader();
+
+                    fileReader.onload = async (event) => {
+                        try {
+                            const backupData = event.target.result;
+                            const parsedData = JSON.parse(backupData);
+
+                            // Assuming pages is your target variable to store restored data
+                            pages = parsedData;
+                            currentPage = 0; // Reset to the first page
+
+                            // Store pages in localStorage
+                            localStorage.setItem('pages', JSON.stringify(pages));
+
+                            // Update UI or perform any necessary actions after restore
+                            refreshWords();
+                            showAlert("Data restored successfully!");
+
+                            // Optional: Clear alert after a few seconds
+                            setTimeout(() => {
+                                alertUserEle.innerText = "";
+                            }, 3000);
+                        } catch (e) {
+                            showAlert("Invalid data format. Please try again.");
+                        }
+                    };
+
+                    // Read the file as text
+                    fileReader.readAsText(file);
+                } catch (error) {
+                    showAlert("Error reading file. Please try again.");
+                }
+            }
+
+            // Clean up
+            document.body.removeChild(fileInput);
+        };
     }
 });
+
+
 
 // Event listener for the delete button
 deleteBTN.addEventListener("click", async () => {
@@ -289,6 +419,7 @@ addPageBTN.addEventListener("click", async () => {
         localStorage.setItem('pages', JSON.stringify(pages)); // Update local storage
         refreshWords(); // Refresh the words display
         updatePageIndicator(); // Update the page indicator
+        BoomFire();
         showAlert("New page added successfully.");
     }
 });
@@ -440,7 +571,7 @@ const promptOkBtn = document.getElementById("promptOkBtn");
 const promptCancelBtn = document.getElementById("promptCancelBtn");
 
 // Function to show prompt and return a promise
-function showPrompt(promptText) {
+function showPrompt(promptText, placeholderIn, typeIn) {
     // Set prompt text
     document.getElementById("promptText").innerText = promptText;
     promptInput.value = ''; // Clear previous input
@@ -452,6 +583,9 @@ function showPrompt(promptText) {
         mainWindPrompt.style.opacity = '1';
         mainWindPrompt.style.transform = 'scale(1)';
         document.body.classList.add('no-scroll');
+        promptInput.focus();
+        promptInput.setAttribute('placeholder', placeholderIn);
+        promptInput.setAttribute('type', typeIn);
     }, 50);
 
     // Return a promise that resolves with the input value or null if cancelled
@@ -461,6 +595,12 @@ function showPrompt(promptText) {
             resolve(promptInput.value); // OK clicked, return input value
             closePrompt();
         }, { once: true });
+        promptInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                promptOkBtn.click();
+            }
+        });
         promptCancelBtn.addEventListener("click", () => {
             resolve(null); // Cancel clicked, return null
             closePrompt();
@@ -635,7 +775,7 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 
 
 document.getElementById("moveBtn").addEventListener("click", async () => {
-    let destinationPage = await showPrompt("Enter the destination page number:");
+    let destinationPage = await showPrompt("Enter the destination page number:", 'Page no. || e.g. 2');
     if (destinationPage !== null && !isNaN(destinationPage) && destinationPage > 0 && destinationPage <= pages.length) {
         pages[destinationPage - 1].push(selectedWordObj);
         pages[currentPage] = pages[currentPage].filter(word => word !== selectedWordObj);
@@ -722,3 +862,29 @@ document.addEventListener("DOMContentLoaded", () => {
         refreshWords();
     }
 });
+
+
+// Function to fire the boom effect 
+function BoomFire() {
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: .9, x: .99 }
+    })
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 1.1, x: .0 }
+        // origin: 
+    })
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 1.1, x: .0 }
+    })
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 1.1 }
+    })
+}

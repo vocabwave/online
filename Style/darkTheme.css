@@ -49,6 +49,10 @@ nav {
     background-color: #959bbb;
     color: white;
 }
+#pasteBTN {
+    background-color: rgb(135, 164, 81);
+    color: white;
+}
 
 #pageCtrlBtn>button {
     background-color: #919100;
@@ -84,7 +88,6 @@ nav {
     color: white;
     background-color: transparent;
 }
-
 #sortChangerPrnt>button {
     color: white;
 }
@@ -161,7 +164,7 @@ nav {
     background-color: grey;
 }
 
-.elemtDataColle:active {
+.elemtDataColle:active{
     transition: 0.3s;
     background-color: #b6a400;
 }

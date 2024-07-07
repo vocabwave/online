@@ -62,7 +62,8 @@ a:visited, a:active {
     text-align: center;
     margin: auto;
 }
-.elemtDataColle:active{
+
+.elemtDataColle:active {
     transition: 0.3s;
     background-color: #ffe600;
 }
@@ -206,7 +207,11 @@ nav {
     font-weight: bold;
     border: none;
     overflow: hidden;
-
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.4rem;
 }
 
 
@@ -226,6 +231,45 @@ nav {
 }
 
 #addBTN:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+#pasteBTN {
+    padding: 0.55rem 0.7rem;
+    border-radius: 5px;
+    margin-left: 0.5rem;
+    background-color: rgb(206, 250, 124);
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    border: none;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#pasteBTN:after {
+    content: "";
+    background-color: rgb(158, 158, 158);
+    /*Background Clr of BTN*/
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s;
+    filter: blur(10px);
+}
+
+#pasteBTN:active:after {
     padding: 0;
     margin: 0;
     opacity: 1;

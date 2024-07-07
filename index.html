@@ -46,11 +46,12 @@
             <button class="userSlctNone" id="deleteAllBTN"
                 style="border-color: red; background-color: rgb(255, 142, 142);"><img
                     style="width: 1.7rem;margin-right: 0.5rem;" src="Files/delete.png" alt=""> Delete All</button>
-            <a href="https://vocabwave.github.io/Files/VocabWave%20(Official%20&%20Safe%20App).apk" class="userSlctNone" id="appUpdateBtn"><img
-                    style="width: 1.7rem;margin-right: 0.5rem;" src="Files/update.png" alt="">Update App</a>
+            <a href="https://vocabwave.github.io/Files/VocabWave%20(Official%20&%20Safe%20App).apk" class="userSlctNone"
+                id="appUpdateBtn"><img style="width: 1.7rem;margin-right: 0.5rem;" src="Files/update.png" alt="">Update
+                App</a>
             <br>
             <br>
-            <p id="vertagSMenu">Web Version:&nbsp;<strong>2.0</strong></p>
+            <p id="vertagSMenu">Web Version:&nbsp;<strong>2.1.0</strong></p>
         </div>
     </div>
     <div id="dataTrans" style="display: none;">
@@ -58,9 +59,10 @@
             style="display: none; border-color: red; background-color: rgb(255, 142, 142);">D-One</button>
 
     </div>
-    <div id="userinPrent">
-        <input type="search" class="userSlctNone" placeholder="Type any word or sentence" id="userInWord">
-        <button class="uniFont userSlctNone" id="addBTN">Add</button>
+    <div class="uniFont" id="userinPrent">
+        <input type="search" class="userSlctNone" placeholder="Type any word or sentence. e.g. Apple" id="userInWord">
+        <button class="uniFont userSlctNone" id="addBTN">Add</button>or
+        <button class="uniFont userSlctNone" id="pasteBTN">Paste</button>
     </div>
 
     <div id="paginationPrnt">
@@ -122,7 +124,7 @@
     <div id="promptBoxPrnt">
         <div id="mainWindPrompt">
             <p id="promptText" class="DiaTextAllSize">Enter your text:</p>
-            <input type="text" placeholder="Paste Here" id="promptInput" class="DiaTextAllSize" />
+            <input type="text" placeholder="Enter Here" id="promptInput" class="DiaTextAllSize" />
             <div>
                 <button class="DiaBtns DiaTextAllSize" id="promptCancelBtn">Cancel</button>
                 <button class="DiaBtns DiaTextAllSize" id="promptOkBtn">OK</button>
@@ -156,10 +158,12 @@
         <input type="text" id="editInput">
     </div>
 </body>
+<!-- Script For the Boom Particle Effects  -->
+<script src="Script/boomScript.js"></script>
 <script src="Script/script.js"></script>
 <script src="Script/ScriptOld.js"></script>
 <script src="Script/archivedWin.js"></script>
-<!-- <script src="Script/sideMenu.js"></script> -->
-<!-- <script src="Script/HoldMune.js"></script> -->
+<!-- <script src="Script/sideMenu.js"></script>
+<script src="Script/HoldMune.js"></script> -->
 
 </html>
